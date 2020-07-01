@@ -1,4 +1,6 @@
-from django.shortcuts import messages, redirect, render
+from django.contrib import messages
+from django.shortcuts import redirect, render
+from markdown2 import Markdown
 from random import randint
 from . import forms
 from . import util
@@ -13,16 +15,17 @@ def index(request):
 def wiki(request, title):
     entry = util.get_entry(title)
     if entry:
-        return render(request, "entry.html", {
-           "title": title, "entry": entry,
+        return render(request, "encyclopedia/entry.html", {
+           "title": title, "entry": Markdown().convert(entry),
         })
     else:
-        return render(request, "404.html", {
+        return render(request, "encyclopedia/404.html", {
             "msg": "Entry not found.",
         })
 
 
-def search(request, query):
+def search(request):
+    query = request.GET.get("q", "")
     entries = util.list_entries()
     if query in entries:
         return redirect(f"/wiki/{query}")
@@ -67,6 +70,6 @@ def edit(request, title):
 
 def random(request):
     entries = util.list_entries()
-    entryNum = randint(0, len(entries))
+    entryNum = randint(0, len(entries) - 1)
     entry = entries[entryNum]
     return redirect(f"/wiki/{entry}")
