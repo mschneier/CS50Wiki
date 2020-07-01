@@ -14,7 +14,7 @@ def wiki(request, title):
     entry = util.get_entry(title)
     if entry:
         return render(request, "entry.html", {
-           "entry": entry,
+           "title": title, "entry": entry,
         })
     else:
         return render(request, "404.html", {
@@ -27,8 +27,8 @@ def search(request, query):
     if query in entries:
         return redirect(f"/wiki/{query}")
     subStrings = [entry for entry in entries if query in entry]
-    return render(request, "search.html", {
-        "entries": subStrings,
+    return render(request, "encyclopedia/search.html", {
+        "query": query, "entries": subStrings,
     })
 
 def new(request):
@@ -44,14 +44,14 @@ def new(request):
             util.save_entry(newEntry, markDown)
             messages.success(request, "New entry made.")
             return redirect(f"/wiki/{newEntry}")
-    return render(request, "new.html", {
+    return render(request, "encyclopedia/new.html", {
         "form": forms.NewEntryForm()
     })
 
 def edit(request, title):
     entry = util.get_entry(title)
     if not entry:
-        return render(request, "404.html", {
+        return render(request, "encyclopedia/404.html", {
             "msg": "Entry not found.",
         })
     if request.method == "POST":
@@ -61,7 +61,7 @@ def edit(request, title):
             util.save_entry(title, markDown)
             messages.succes(request, "Entry edited.")
             return redirect(f"/wiki/{title}")
-    return render(request, "edit.html", {
+    return render(request, "encyclopedia/edit.html", {
         "form": forms.EditEntryForm()
     })
 

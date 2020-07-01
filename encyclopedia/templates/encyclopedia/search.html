@@ -1,14 +1,15 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-    Encyclopedia
+    Search
 {% endblock %}
 
 {% block body %}
-    <h1>All Pages</h1>
+    <h1>You searched for: {{query}}</h1>
+    <h3>That entry doesn't exist. Did you mean?...</h3>
     <ul>
         {% for entry in entries %}
-            <li><a href="/wiki/{{ entry }}">{{entry}}</a></li>
+            <li><a href="/wiki/{{entry}}">{{entry}}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}
