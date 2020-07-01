@@ -62,7 +62,7 @@ def edit(request, title):
             messages.succes(request, "Entry edited.")
             return redirect(f"/wiki/{title}")
     return render(request, "encyclopedia/edit.html", {
-        "form": forms.EditEntryForm()
+        "title": title, "form": forms.EditEntryForm()
     })
 
 def random(request):
